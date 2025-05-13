@@ -16,14 +16,10 @@ FROM node:16
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-
-RUN npm install --only=production
+COPY --from=builder /usr/src/app/node_modules ./node_modules
 
 COPY --from=builder /usr/src/app/dist ./dist
 
-COPY .env .
-
 EXPOSE 5000
 
-CMD ["npm", "start"]
+CMD ["node", "dist/app.js"]
