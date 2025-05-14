@@ -51,6 +51,7 @@ O frontend é construído com React e TypeScript. Ele inclui os seguintes compon
 1. Clone o repositório.
 2. Navegue até o diretório do projeto.
 3. Execute `docker-compose up` para iniciar os serviços do backend e frontend.
+4. Execute `npm install` no diretório do backend ou do frontend para instalar as dependencias localmente
 
 #### Acessando a Aplicação
 - O frontend estará disponível em `http://localhost:3000`.
@@ -62,9 +63,6 @@ Contribuições são bem-vindas! Por favor, siga os passos abaixo:
 1. Faça um fork do repositório.
 2. Crie uma nova branch para sua funcionalidade ou correção de bug.
 3. Envie um pull request com uma descrição detalhada das suas alterações.
-
-### Licença
-Este projeto está licenciado sob a Licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
 ## Padrão de Projeto Utilizado
 
