@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:13
+    image: postgres
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -42,16 +42,15 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: development
     ports:
       - "3000:3000"
     environment:
-      REACT_APP_API_URL: http://localhost:5000/api
-      CHOKIDAR_USEPOLLING: true
-      CHOKIDAR_INTERVAL: 100
+      - VITE_API_URL=http://backend:5000/api
     volumes:
-      - ./frontend:/usr/src/app
+      - ./frontend:/usr/src/app:delegated
       - /usr/src/app/node_modules
-    command: npm start -- --host 0.0.0.0
+    command: npm run dev -- --host 0.0.0.0
     depends_on:
       - backend
 
