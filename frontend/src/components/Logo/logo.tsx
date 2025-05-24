@@ -12,7 +12,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({
   src = '/images/logo-retock.png',
   alt = 'Retock - Salão de Beleza Logo',
-  width = '200px',
+  width = '400px',
   height = 'auto',
   tagline
 }) => {

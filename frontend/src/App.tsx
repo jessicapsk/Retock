@@ -7,8 +7,6 @@ function App() {
       <header className="App-header">
         <Logo tagline="Realce sua beleza com quem entende do assunto!" />
 
-        <h1>Bem-vindo ao Retock!</h1>
-     
       </header>
     </div>
   );
