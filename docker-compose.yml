@@ -44,15 +44,21 @@ services:
       dockerfile: Dockerfile
       target: development
     ports:
-      - "3000:3000"
+      - "5173:5173"
     environment:
       - VITE_API_URL=http://backend:5000/api
     volumes:
-      - ./frontend:/usr/src/app:delegated
-      - /usr/src/app/node_modules
+      - type: bind
+        source: ./frontend
+        target: /usr/src/app
+        consistency: delegated
+      - type: volume
+        source: frontend_node_modules
+        target: /usr/src/app/node_modules
     command: npm run dev -- --host 0.0.0.0
     depends_on:
       - backend
 
 volumes:
   postgres_data:
+  frontend_node_modules:
