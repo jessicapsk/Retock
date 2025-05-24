@@ -20,7 +20,8 @@ WORKDIR /usr/src/app
 # Copie package.json e package-lock.json (se disponível)
 COPY package*.json ./
 
-# O npm install será executado pelo comando do docker-compose para popular o volume
+RUN npm install
+
 # COPY . . irá copiar o restante dos arquivos de origem
 COPY . .
 
