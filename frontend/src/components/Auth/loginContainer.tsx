@@ -22,10 +22,17 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           alignItems: 'center',
           py: 4,
           px: 2,
+
+          // imagem do salão com baixa opacidade
+          backgroundImage: `linear-gradient(rgba(234, 228, 214, 0.7), rgba(234, 228, 214, 0.7)), url('/images/interior-salão.svg')`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+
         }}
       >
         <Logo
-          width="400px"
+          width="500px"
           tagline="Realce sua beleza com quem entende do assunto!"
         />
       </Box>

@@ -9,6 +9,7 @@ import InputField from '../components/Layout/customInput';
 import { HiOutlineUser, HiOutlineLockClosed } from "react-icons/hi";
 import AuthLayout from '../components/Auth/loginContainer';
 
+
 const LoginScreen = () => {
   const [formData, setFormData] = useState({
     usuario: '',
