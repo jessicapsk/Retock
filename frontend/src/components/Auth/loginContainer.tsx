@@ -1,42 +1,48 @@
 import { Box } from '@mui/material';
-//import Logo from './Logo'; // Seu componente de logo existente
+import Logo from '../Logo/logo';
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Box sx={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: { xs: 'column', md: 'row' }, // Coluna em mobile, linha em desktop
-    }}>
-      {/* Seção Esquerda - Logo */}
-      <Box sx={{
-        width: { md: '50%' },
+    <Box
+      sx={{
+        width: '100vw',             // força ocupar toda a largura da tela
+        height: '100vh',            // força ocupar toda a altura da tela
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        p: 4,
-        bgcolor: 'rgba(153, 96, 71, 0.05)' // Fundo claro alaranjado
-      }}>
-         {/* <Logo /> */}
+        flexDirection: { xs: 'column', md: 'row' }, // empilha no mobile
+      }}
+    >
+      {/* Lado Esquerdo - Logo */}
+      <Box
+        sx={{
+          flex: 1, // ocupa metade em layout horizontal
+          bgcolor: '#EAE4D6',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          py: 4,
+          px: 2,
+        }}
+      >
+        <Logo
+          width="400px"
+          tagline="Realce sua beleza com quem entende do assunto!"
+        />
       </Box>
 
-      {/* Seção Direita - Formulário */}
-      <Box sx={{
-        width: { md: '100%' },
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        p: 4,
-        bgcolor: 'background.paper' // Fundo branco
-      }}>
-        <Box sx={{ 
-          width: '100%', 
-          maxWidth: 400,
-          p: 4
-        }}>
-          {children}
-        </Box>
+      {/* Lado Direito - Formulário */}
+      <Box
+        sx={{
+          flex: 1,
+          bgcolor: 'white',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          py: 4,
+          px: 2,
+        }}
+      >
+        <Box sx={{ width: '100%', maxWidth: 400 }}>{children}</Box>
       </Box>
     </Box>
   );

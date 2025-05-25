@@ -1,7 +1,7 @@
 // src/routes.tsx
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/Loginpage";
-//import { RegisterPage } from "./pages/Registerpage";
+import RegisterPage from "./pages/Registerpage";
 //import DashboardAdmin from "./pages/DashboardAdmin";
 //import DashboardClient from "./pages/DashboardClient";
 //import DashboardProfessional from "./pages/DashboardProfessional";
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
-    //element: <RegisterPage />,
+    element: <RegisterPage />,
   },
   {
     path: "/admin",

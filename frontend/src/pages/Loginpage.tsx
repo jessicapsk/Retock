@@ -28,16 +28,19 @@ const LoginScreen = () => {
   };
 
   return (
-    <AuthLayout> {/* Substitui o container principal pelo AuthLayout */}
+    <AuthLayout>
       <Box component="form" onSubmit={handleSubmit} sx={{
         width: '100%',
-        maxWidth: 400,
-        p: 4,
+        p: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        flex: 1
       }}>
         <Typography sx={{
           fontFamily: 'Playfair Display, serif',
-          mb: 4,
-          fontSize: '32px',
+          mb: 3,
+          fontSize: { xs: '28px', sm: '32px' },
           textAlign: 'center',
           color: '#3C333F',
           fontWeight: 600
@@ -53,7 +56,7 @@ const LoginScreen = () => {
           onChange={(e) => setFormData({ ...formData, usuario: e.target.value })}
           error={error && !formData.usuario}
           helperText={error && !formData.usuario ? 'Campo obrigatório' : ''}
-          sx={{ mb: 3 }}
+          sx={{ mb: 2 }}
         />
 
         <InputField
@@ -68,11 +71,14 @@ const LoginScreen = () => {
           sx={{ mb: 2 }}
         />
 
-        <Box textAlign="right" mb={4}>
+        <Box textAlign="right" mb={3}>
           <Link href="#" sx={{
             color: '#996047',
-            textDecoration: 'none',
-            '&:hover': { textDecoration: 'underline' }
+            fontSize: '16px',
+            fontFamily: 'Playfair Display, serif',
+            fontWeight: 'bold',
+            textDecoration: 'underline',
+            '&:hover': { textDecoration: 'underline', color: '#7a4c3a' }
           }}>
             Esqueceu a senha?
           </Link>
@@ -83,31 +89,36 @@ const LoginScreen = () => {
           type="submit"
           variant="contained"
           sx={{
-            py: 1.5,
+            width: '150px', // Controla a largura
+            height: '45px', // Controla a altura
+            alignSelf: 'center', // Centraliza o botão
             borderRadius: '30px',
+            fontFamily: 'Playfair Display, serif',
             bgcolor: '#996047',
-            '&:hover': { bgcolor: '#7a4c3a' }
-          }}
+            '&:hover': { bgcolor: '#7a4c3a' },
+            textTransform: 'none', // Remove uppercase automático
+            fontSize: '0.9rem', // Controla tamanho da fonte
+        }}
         >
-          Entrar
+        entrar
         </Button>
 
         <Typography sx={{ 
-          mt: 4, 
+          mt: 3,
           textAlign: 'center', 
           fontFamily: 'Playfair Display, serif',
-          fontSize: '16px', 
-          color: 'rgba(60, 51, 63, 1)'
+          fontSize: '18px',
+          color: '#3C333F',
+          textShadow: '2px 2px 2px rgba(67, 48, 30, 0.5)',
         }}>
           Não possui cadastro? {' '}
-          <Link href="#" sx={{
-            color: 'rgba(150, 90, 65, 0.95)',
-            fontFamily: 'Playfair Display, serif',
-            fontSize: '16px',
-            fontWeight: 500,
-            lineHeight: "27px",
-            textDecoration: 'none',
-            '&:hover': { textDecoration: 'underline' }
+          <Link href="/register" sx={{
+            color: '#996047',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            textShadow: '2px 2px 2px rgba(67, 48, 30, 0.5)',
+            '&:hover': { textDecoration: 'underline', color: '#7a4c3a' },
+            textDecoration: 'underline',
           }}>
             Clique aqui
           </Link>

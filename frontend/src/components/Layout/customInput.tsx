@@ -37,6 +37,7 @@ const InputField: React.FC<InputFieldProps> = ({
             color: "#3C333F",
             fontWeight: 500,
             marginLeft: "12px",
+            fontSize: "16px",
           }}
         >
           {label}
