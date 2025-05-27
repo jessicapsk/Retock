@@ -16,9 +16,13 @@ FROM node:16
 
 WORKDIR /usr/src/app
 
-COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY package*.json ./
+
+RUN npm install --only=production
 
 COPY --from=builder /usr/src/app/dist ./dist
+
+COPY .env* ./
 
 EXPOSE 5000
 

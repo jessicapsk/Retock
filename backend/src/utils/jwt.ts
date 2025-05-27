@@ -5,7 +5,7 @@ dotenv.config();
 
 export interface JwtPayload {
   id: number;
-  papel: 'cliente' | 'profissional' | 'admin';
+  role: 'client' | 'professional' | 'admin';
 }
 
 export interface TokenPair {
@@ -41,9 +41,9 @@ export function issueTokens(payload: JwtPayload): TokenPair {
  * @returns Novo par de tokens
  */
 export function refreshTokens(token: string): TokenPair {
-  // jwt.verify lançará erro se o token for inválido ou expirado
   const decoded = jwt.verify(token, JWT_REFRESH_SECRET) as JwtPayload;
-  return issueTokens({ id: decoded.id, papel: decoded.papel });
+  // Certifique-se de que o payload passado para issueTokens aqui também use 'role'
+  return issueTokens({ id: decoded.id, role: decoded.role });
 }
 
 /**
