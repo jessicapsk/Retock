@@ -6,7 +6,6 @@ dotenv.config();
 export interface JwtPayload {
   id: number;
   role: 'client' | 'professional' | 'admin';
-}
 
 export interface TokenPair {
   accessToken: string;
@@ -44,7 +43,7 @@ export function refreshTokens(token: string): TokenPair {
   const decoded = jwt.verify(token, JWT_REFRESH_SECRET) as JwtPayload;
   // Certifique-se de que o payload passado para issueTokens aqui também use 'role'
   return issueTokens({ id: decoded.id, role: decoded.role });
-}
+
 
 /**
  * Verifica qualquer token JWT e retorna o payload decodificado.
