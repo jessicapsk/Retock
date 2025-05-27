@@ -3,24 +3,24 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity("users")
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column()
-    name: string;
+    name!: string;
 
     @Column({ unique: true })
-    email: string;
+    email!: string;
 
     @Column()
-    password: string;
+    password!: string;
 
     @Column({
         type: "enum",
         enum: ["admin", "client", "professional"],
         default: "client"
     })
-    role: string;
+    role!: string;
 
     @Column({ default: true })
-    isActive: boolean;
+    isActive!: boolean;
 }
