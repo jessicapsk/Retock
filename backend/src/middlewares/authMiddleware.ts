@@ -38,7 +38,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-// Middleware opcional para verificar papéis específicos
+// Middleware para verificar papéis específicos
 export const authorizeRoles = (...allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user || !req.user.role) { // Alterado de 'papel' para 'role'
