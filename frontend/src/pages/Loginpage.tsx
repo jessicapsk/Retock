@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { z } from 'zod';
 import {
   Box,
   Typography,
@@ -9,23 +10,50 @@ import InputField from '../components/Layout/customInput';
 import { HiOutlineUser, HiOutlineLockClosed } from "react-icons/hi";
 import AuthLayout from '../components/Auth/loginContainer';
 
+// Esquema de validação Zod
+const loginSchema = z.object({
+  email: z.string().email('Email inválido'),
+  senha: z.string().min(1, 'Campo obrigatório')
+});
 
 const LoginScreen = () => {
   const [formData, setFormData] = useState({
-    usuario: '',
+    email: '',
     senha: ''
   });
-  const [error, setError] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.usuario || !formData.senha) {
-      setError(true);
-      return;
+    
+    try {
+      await loginSchema.parseAsync(formData);
+
+      setErrors({});
+      
+      console.log('Login realizado:', formData);
+      setFormData({ email: '', senha: '' });
+      
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.errors.forEach(err => {
+          const path = err.path[0];
+          if (path) newErrors[path] = err.message;
+        });
+        setErrors(newErrors);
+      }
     }
-    console.log('Login realizado:', formData);
-    setFormData({ usuario: '', senha: '' });
-    setError(false);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Limpar erro do campo quando o usuário começa a digitar
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   return (
@@ -50,25 +78,27 @@ const LoginScreen = () => {
         </Typography>
 
         <InputField
-          label="Login"
-          placeholder="Digite seu usuário"
-          icon={<HiOutlineUser />}    
-          value={formData.usuario}
-          onChange={(e) => setFormData({ ...formData, usuario: e.target.value })}
-          error={error && !formData.usuario}
-          helperText={error && !formData.usuario ? 'Campo obrigatório' : ''}
+          name="email"
+          label="Email"
+          placeholder="Digite seu email"
+          icon={<HiOutlineUser />}
+          value={formData.email}
+          onChange={handleChange}
+          error={!!errors.email}
+          helperText={errors.email}
           sx={{ mb: 2 }}
         />
 
         <InputField
+          name="senha"
           type="password"
           label="Senha"
           placeholder="Digite sua senha"
           icon={<HiOutlineLockClosed />}
           value={formData.senha}
-          onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
-          error={error && !formData.senha}
-          helperText={error && !formData.senha ? 'Campo obrigatório' : ''}
+          onChange={handleChange}
+          error={!!errors.senha}
+          helperText={errors.senha}
           sx={{ mb: 2 }}
         />
 
@@ -90,18 +120,18 @@ const LoginScreen = () => {
           type="submit"
           variant="contained"
           sx={{
-            width: '150px', // Controla a largura
-            height: '45px', // Controla a altura
-            alignSelf: 'center', // Centraliza o botão
+            width: '150px',
+            height: '45px',
+            alignSelf: 'center',
             borderRadius: '30px',
             fontFamily: 'Playfair Display, serif',
             bgcolor: '#996047',
             '&:hover': { bgcolor: '#7a4c3a' },
-            textTransform: 'none', // Remove uppercase automático
-            fontSize: '0.9rem', // Controla tamanho da fonte
-        }}
+            textTransform: 'none',
+            fontSize: '0.9rem',
+          }}
         >
-        entrar
+          entrar
         </Button>
 
         <Typography sx={{ 

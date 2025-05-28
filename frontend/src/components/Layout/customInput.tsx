@@ -72,7 +72,7 @@ const InputField: React.FC<InputFieldProps> = ({
             borderRadius: "30px",
             height: "48px",
             "&:hover fieldset": {
-              borderColor: "#996047 !important",
+              borderColor: "rgba(63, 34, 23, 0.5) !important",
             },
           },
         }}
@@ -80,9 +80,13 @@ const InputField: React.FC<InputFieldProps> = ({
           width: "100%",
           "& .MuiOutlinedInput-root": {
             borderRadius: "30px",
-            border: "1px solidrgb(93, 59, 45)",
-            backgroundColor: "#965A41", // Cor de fundo adicionada
+            border: "1px solidrgba(63, 34, 23, 0.5)",
+            backgroundColor: "rgba(150, 90, 65, 0.85)", // Cor de fundo adicionada
             paddingLeft: icon ? 0 : "14px",
+            "& .MuiInputBase-input": {
+              color: "white", // Texto em branco
+              caretColor: "white", // Cursor em branco
+            },
           },
           "& input::placeholder": {
             color: "white",          // Cor do texto

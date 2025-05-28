@@ -1,53 +1,59 @@
 import { Box } from '@mui/material';
 import Logo from '../Logo/logo';
+
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Box
       sx={{
-        width: '100vw',             // força ocupar toda a largura da tela
-        height: '100vh',            // força ocupar toda a altura da tela
+        width: '100vw',
+        minHeight: '100vh', // Alterado para minHeight
         display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' }, // empilha no mobile
+        flexDirection: { xs: 'column', md: 'row' },
       }}
     >
-      {/* Lado Esquerdo - Logo */}
+      {/* Lado Esquerdo - Logo (Ajustado para mobile) */}
       <Box
         sx={{
-          flex: 1, // ocupa metade em layout horizontal
+          flex: { xs: 0.3, md: 1 }, // Reduz altura no mobile
           bgcolor: '#EAE4D6',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          py: 4,
+          py: { xs: 2, md: 4 }, 
           px: 2,
-          // imagem do salão com baixa opacidade
-          backgroundImage: `linear-gradient(rgba(234, 228, 214, 0.7), rgba(234, 228, 214, 0.7)), url('/images/interior-salão.svg')`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
         }}
       >
         <Logo
-          width="500px"
+          width= '450px'
           tagline="Realce sua beleza com quem entende do assunto!"
         />
       </Box>
-      {/* Lado Direito - Formulário */}
+
+      {/* Lado Direito - Formulário (Ajustes de espaçamento) */}
       <Box
         sx={{
-          flex: 1,
+          flex: { xs: 1, md: 1 }, 
           bgcolor: 'white',
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          py: 4,
+          justifyContent: { xs: 'flex-start', md: 'center' }, 
+          alignItems: 'flex-start', 
+          py: { xs: 2, md: 4 },
           px: 2,
+          overflow: 'auto', 
         }}
       >
-        <Box sx={{ width: '100%', maxWidth: 400 }}>{children}</Box>
+        <Box sx={{ 
+          width: '100%',
+          maxWidth: { xs: '100%', sm: '500px' }, // Largura maior
+          margin: '0 auto',
+          padding: { xs: '10px', sm: '20px' } 
+        }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );
 };
+
 export default AuthLayout;
