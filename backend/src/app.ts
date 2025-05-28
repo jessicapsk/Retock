@@ -4,6 +4,7 @@ import cors from "cors";
 import { AppDataSource } from "./config/database";
 import dotenv from "dotenv";
 import { User } from "./models/User";
+import authRoutes from './routes/authRoutes';
 
 // Configuração de ambiente
 dotenv.config();
@@ -75,6 +76,9 @@ app.post("/api/users/test", async (req: express.Request, res: express.Response) 
     });
   }
 });
+
+//rotas de autenticação
+app.use('/api/auth', authRoutes);
 
 // Inicialização do DataSource e Express
 const PORT = process.env.PORT || 5000;
