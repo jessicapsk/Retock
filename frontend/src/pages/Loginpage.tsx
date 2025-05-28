@@ -50,14 +50,14 @@ const LoginScreen = () => {
       // Ativa estado de carregamento
       setIsLoading(true);
       
-      // Chamada à API
       const response = await AuthService.login({
         email: formData.email,
         password: formData.senha
       });
       
-      // Salva o token no localStorage
-      localStorage.setItem('token', response.token);
+      // Salva o token no localStorage (AJUSTADO)
+      localStorage.setItem('token', response.tokens.accessToken); 
+      localStorage.setItem('refreshToken', response.tokens.refreshToken);
       localStorage.setItem('user', JSON.stringify(response.user));
       
       // Redireciona com base no tipo de usuário

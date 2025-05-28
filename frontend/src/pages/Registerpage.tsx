@@ -125,17 +125,14 @@ const RegisterPage: React.FC = () => {
       
       // Preparar dados para a API (removendo formatação do CPF e celular)
       const apiData = {
-        nomeCompleto: formData.nomeCompleto,
-        email: formData.email,
-        celular: formData.celular.replace(/\D/g, ''),
-        cpf: formData.cpf.replace(/\D/g, ''),
-        password: formData.senha
-      };
+      name: formData.nomeCompleto, 
+      email: formData.email,
+      password: formData.senha
 
-      // Chamar serviço de registro
-      await AuthService.register(apiData);
-  
-      setSuccessMessage('Cadastro realizado com sucesso! Redirecionando...');
+      };
+      
+      const response = await AuthService.registerClient(apiData);   
+      setSuccessMessage(response.message ||'Cadastro realizado com sucesso! Redirecionando...');
       
       // Limpar formulário
       setFormData({
