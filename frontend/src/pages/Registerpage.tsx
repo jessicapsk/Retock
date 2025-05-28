@@ -13,6 +13,7 @@ import {
   HiOutlineIdentification,
   HiOutlineArrowCircleLeft
 } from "react-icons/hi";
+import { AuthService } from '../services/authService';
 
 // Esquema de validação Zod
 const userSchema = z.object({
@@ -41,6 +42,27 @@ const RegisterPage: React.FC = () => {
     confirmarSenha: ''
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // Função para verificar se o formulário está válido
+  const isFormValid = () => {
+    return (
+      formData.nomeCompleto.trim() !== '' &&
+      formData.email.trim() !== '' &&
+      formData.celular.trim() !== '' &&
+      formData.cpf.trim() !== '' &&
+      formData.senha.trim() !== '' &&
+      formData.confirmarSenha.trim() !== '' &&
+      !errors.nomeCompleto &&
+      !errors.email &&
+      !errors.celular &&
+      !errors.cpf &&
+      !errors.senha &&
+      !errors.confirmarSenha
+    );
+  };
 
   const handleVoltarAoInicio = () => navigate('/');
 
@@ -68,6 +90,10 @@ const RegisterPage: React.FC = () => {
 
     setFormData(prev => ({ ...prev, [name]: processedValue }));
     setErrors(prev => ({ ...prev, [name]: '' }));
+    
+    // Limpar mensagens de erro/sucesso
+    if (apiError) setApiError('');
+    if (successMessage) setSuccessMessage('');
   };
 
   const validateForm = async () => {
@@ -89,9 +115,29 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (await validateForm()) {
-      console.log('Cadastro realizado:', formData);
-      // Limpar formulário após sucesso
+    setApiError('');
+    setSuccessMessage('');
+    
+    if (!(await validateForm())) return;
+
+    try {
+      setIsLoading(true);
+      
+      // Preparar dados para a API (removendo formatação do CPF e celular)
+      const apiData = {
+        nomeCompleto: formData.nomeCompleto,
+        email: formData.email,
+        celular: formData.celular.replace(/\D/g, ''),
+        cpf: formData.cpf.replace(/\D/g, ''),
+        password: formData.senha
+      };
+
+      // Chamar serviço de registro
+      await AuthService.register(apiData);
+  
+      setSuccessMessage('Cadastro realizado com sucesso! Redirecionando...');
+      
+      // Limpar formulário
       setFormData({
         nomeCompleto: '',
         email: '',
@@ -100,7 +146,25 @@ const RegisterPage: React.FC = () => {
         senha: '',
         confirmarSenha: ''
       });
-      // Redirecionar ou mostrar mensagem de sucesso
+      
+      // Redirecionar após 2 segundos
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+      
+    } catch (error: any) {
+      console.error('Erro no cadastro:', error);
+      
+      // Tratar diferentes tipos de erros
+      if (error.response?.data?.message) {
+        setApiError(error.response.data.message);
+      } else if (error.message) {
+        setApiError(error.message);
+      } else {
+        setApiError('Ocorreu um erro ao realizar o cadastro. Tente novamente.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -150,6 +214,29 @@ const RegisterPage: React.FC = () => {
         }}>
           Cadastre-se
         </Typography>
+
+        {/* Mensagens de feedback */}
+        {apiError && (
+          <Typography sx={{
+            color: '#d32f2f',
+            textAlign: 'center',
+            mb: 2,
+            fontFamily: 'Playfair Display, serif',
+          }}>
+            {apiError}
+          </Typography>
+        )}
+        
+        {successMessage && (
+          <Typography sx={{
+            color: '#2e7d32',
+            textAlign: 'center',
+            mb: 2,
+            fontFamily: 'Playfair Display, serif',
+          }}>
+            {successMessage}
+          </Typography>
+        )}
 
         <InputField
           name="nomeCompleto"
@@ -224,6 +311,7 @@ const RegisterPage: React.FC = () => {
         <Button
           type="submit"
           variant="contained"
+          disabled={isLoading || !isFormValid()}
           sx={{
             width: '150px',
             height: '45px',
@@ -231,14 +319,20 @@ const RegisterPage: React.FC = () => {
             borderRadius: '30px',
             fontFamily: 'Playfair Display, serif',
             bgcolor: '#996047',
-            '&:hover': { bgcolor: '#7a4c3a' },
+            '&:hover': { 
+              bgcolor: !isFormValid() ? '#996047' : '#7a4c3a' 
+            },
+            '&:disabled': { 
+              bgcolor: '#cccccc',
+              cursor: 'not-allowed' 
+            },
             textTransform: 'none',
             fontSize: '0.9rem',
             mt: 3,
             mb: 3
           }}
         >
-          Cadastrar
+          {isLoading ? 'Processando...' : 'Cadastrar'}
         </Button>
       </Box>
     </AuthLayout>

@@ -6,9 +6,11 @@ import {
   Button,
   Link
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import InputField from '../components/Layout/customInput';
 import { HiOutlineUser, HiOutlineLockClosed } from "react-icons/hi";
 import AuthLayout from '../components/Auth/loginContainer';
+import { AuthService } from '../services/authService';
 
 // Esquema de validação Zod
 const loginSchema = z.object({
@@ -17,24 +19,65 @@ const loginSchema = z.object({
 });
 
 const LoginScreen = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     senha: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
+
+  // Função para validar se o formulário está preenchido corretamente
+  const isFormValid = () => {
+    return (
+      formData.email.trim() !== '' && 
+      formData.senha.trim() !== '' &&
+      !errors.email && 
+      !errors.senha
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setApiError('');
     
     try {
+      // Validação com Zod
       await loginSchema.parseAsync(formData);
-
       setErrors({});
       
-      console.log('Login realizado:', formData);
+      // Ativa estado de carregamento
+      setIsLoading(true);
+      
+      // Chamada à API
+      const response = await AuthService.login({
+        email: formData.email,
+        password: formData.senha
+      });
+      
+      // Salva o token no localStorage
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
+      // Redireciona com base no tipo de usuário
+      switch(response.user.role) {
+        case 'admin':
+          navigate('/dashboard-admin');
+          break;
+        case 'professional':
+          navigate('/dashboard-professional');
+          break;
+        default:
+          navigate('/dashboard-client');
+      }
+      
+      // Limpa o formulário
       setFormData({ email: '', senha: '' });
       
     } catch (error) {
+      setIsLoading(false);
+      
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
         error.errors.forEach(err => {
@@ -42,6 +85,9 @@ const LoginScreen = () => {
           if (path) newErrors[path] = err.message;
         });
         setErrors(newErrors);
+      } else {
+        setApiError('Credenciais inválidas. Por favor, tente novamente.');
+        console.error('Erro no login:', error);
       }
     }
   };
@@ -54,6 +100,7 @@ const LoginScreen = () => {
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
+    if (apiError) setApiError('');
   };
 
   return (
@@ -76,6 +123,17 @@ const LoginScreen = () => {
         }}>
           Bem-vindo de volta
         </Typography>
+
+        {apiError && (
+          <Typography sx={{
+            color: '#d32f2f',
+            textAlign: 'center',
+            mb: 2,
+            fontFamily: 'Playfair Display, serif',
+          }}>
+            {apiError}
+          </Typography>
+        )}
 
         <InputField
           name="email"
@@ -119,6 +177,7 @@ const LoginScreen = () => {
           fullWidth
           type="submit"
           variant="contained"
+          disabled={isLoading || !isFormValid()}
           sx={{
             width: '150px',
             height: '45px',
@@ -126,12 +185,18 @@ const LoginScreen = () => {
             borderRadius: '30px',
             fontFamily: 'Playfair Display, serif',
             bgcolor: '#996047',
-            '&:hover': { bgcolor: '#7a4c3a' },
+            '&:hover': { 
+              bgcolor: !isFormValid() ? '#996047' : '#7a4c3a' 
+            },
+            '&:disabled': { 
+              bgcolor: 'cinza',
+              cursor: 'not-allowed'
+            },
             textTransform: 'none',
             fontSize: '0.9rem',
           }}
         >
-          entrar
+          {isLoading ? 'Carregando...' : 'Entrar'}
         </Button>
 
         <Typography sx={{ 
