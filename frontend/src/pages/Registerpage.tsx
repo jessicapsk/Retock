@@ -84,7 +84,13 @@ const RegisterPage: React.FC = () => {
         processedValue = formatCPF(value);
         break;
       case 'celular':
-        processedValue = value.replace(/\D/g, '').slice(0, 11);
+        processedValue = value
+
+        // Acrescentei formatação do número de telefone
+        .replace(/\D/g, '')
+        .slice(0,11)
+        .replace(/^(\d{2})(\d)/g, '($1) $2')
+        .replace(/(\d{5})(\d)/, '$1-$2');
         break;
     }
 
@@ -98,9 +104,15 @@ const RegisterPage: React.FC = () => {
 
   const validateForm = async () => {
     try {
-      await userSchema.parseAsync(formData);
+        const dataToValidate = {
+          ...formData,
+          celular: formData.celular.replace(/\D/g, ''),
+        }
+        
+      await userSchema.parseAsync(dataToValidate);
       setErrors({});
       return true;
+
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors = error.errors.reduce((acc, curr) => {
@@ -127,8 +139,7 @@ const RegisterPage: React.FC = () => {
       const apiData = {
       name: formData.nomeCompleto, 
       email: formData.email,
-      password: formData.senha
-
+      password: formData.senha,
       };
       
       const response = await AuthService.registerClient(apiData);   
@@ -144,10 +155,10 @@ const RegisterPage: React.FC = () => {
         confirmarSenha: ''
       });
       
-      // Redirecionar após 2 segundos
+      // Redirecionar após 3 segundos
       setTimeout(() => {
         navigate('/login');
-      }, 2000);
+      }, 3000);
       
     } catch (error: any) {
       console.error('Erro no cadastro:', error);
@@ -262,7 +273,7 @@ const RegisterPage: React.FC = () => {
           name="celular"
           type="tel"
           label="Celular"
-          placeholder="Digite seu celular"
+          placeholder="Digite seu telefone" 
           icon={<HiOutlinePhone />}
           value={formData.celular}
           onChange={handleChange}
