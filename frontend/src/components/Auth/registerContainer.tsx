@@ -5,10 +5,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Box
       sx={{
-        width: '100vw',
-        minHeight: '100vh', // Alterado para minHeight
+       width: '100vw',
+        height: '100vh',
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
+        overflow: 'hidden'
       }}
     >
       {/* Lado Esquerdo - Logo (Ajustado para mobile) */}
