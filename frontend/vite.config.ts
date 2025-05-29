@@ -13,10 +13,10 @@ export default defineConfig({
       interval: 100
     },
     // ensure the client WS connects back to your host
-    hmr: {
+/*     hmr: {
       protocol: 'ws',
       host: 'localhost',
       port: 5173
-    }
+    } */
   }
 })

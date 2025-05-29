@@ -23,7 +23,6 @@ const userSchema = z.object({
     .min(11, 'Número inválido (DDD + 9 dígitos)')
     .max(11, 'Número inválido (DDD + 9 dígitos)')
     .regex(/^\d+$/, 'Apenas números são permitidos'),
-  cpf: z.string().regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido'),
   senha: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
   confirmarSenha: z.string()
 }).refine(data => data.senha === data.confirmarSenha, {
@@ -37,7 +36,6 @@ const RegisterPage: React.FC = () => {
     nomeCompleto: '',
     email: '',
     celular: '',
-    cpf: '',
     senha: '',
     confirmarSenha: ''
   });
@@ -52,13 +50,11 @@ const RegisterPage: React.FC = () => {
       formData.nomeCompleto.trim() !== '' &&
       formData.email.trim() !== '' &&
       formData.celular.trim() !== '' &&
-      formData.cpf.trim() !== '' &&
       formData.senha.trim() !== '' &&
       formData.confirmarSenha.trim() !== '' &&
       !errors.nomeCompleto &&
       !errors.email &&
       !errors.celular &&
-      !errors.cpf &&
       !errors.senha &&
       !errors.confirmarSenha
     );
@@ -66,23 +62,11 @@ const RegisterPage: React.FC = () => {
 
   const handleVoltarAoInicio = () => navigate('/');
 
-  const formatCPF = (value: string): string => {
-    return value
-      .replace(/\D/g, '')
-      .slice(0, 11)
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-  };
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let processedValue = value;
 
     switch (name) {
-      case 'cpf':
-        processedValue = formatCPF(value);
-        break;
       case 'celular':
         processedValue = value.replace(/\D/g, '').slice(0, 11);
         break;
@@ -123,7 +107,7 @@ const RegisterPage: React.FC = () => {
     try {
       setIsLoading(true);
       
-      // Preparar dados para a API (removendo formatação do CPF e celular)
+      // Preparar dados para a API (removendo formatação do celular)
       const apiData = {
       name: formData.nomeCompleto, 
       email: formData.email,
@@ -139,7 +123,6 @@ const RegisterPage: React.FC = () => {
         nomeCompleto: '',
         email: '',
         celular: '',
-        cpf: '',
         senha: '',
         confirmarSenha: ''
       });
@@ -268,17 +251,6 @@ const RegisterPage: React.FC = () => {
           onChange={handleChange}
           error={!!errors.celular}
           helperText={errors.celular}
-        />
-
-        <InputField
-          name="cpf"
-          label="CPF"
-          placeholder="Digite seu CPF"
-          icon={<HiOutlineIdentification />}
-          value={formData.cpf}
-          onChange={handleChange}
-          error={!!errors.cpf}
-          helperText={errors.cpf}
         />
 
         <InputField
