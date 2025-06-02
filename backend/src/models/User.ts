@@ -23,4 +23,7 @@ export class User {
 
     @Column({ default: true })
     isActive!: boolean;
+
+    @Column({ type: "varchar", length: 20, nullable: true })
+    phone?: string | null;
 }

@@ -1,0 +1,26 @@
+.logo-container {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+
+}
+
+.logo-container img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain; 
+  transform: translateX(-50px);
+}
+
+.logo-tagline {
+  font-size: 25px;
+  color: rgba(150, 90, 65, 1); 
+  margin-top: 2px; 
+  font-family: 'Playfair Display', serif; 
+  line-height: 1.4;
+  max-width: 450px; 
+  font-weight: bold; /* Negrito */
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5); /* Sombra */
+}
